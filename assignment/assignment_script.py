@@ -10,15 +10,6 @@ import pandas as pd
 from matplotlib.pyplot import pie, axis, show
 
 
-# generate matplotlib handles to create a legend of the features we put in our map.
-def generate_handles(labels, colors, edge='k', alpha=1):
-    lc = len(colors)  # get the length of the color list
-    handles = []
-    for i in range(len(labels)):
-        handles.append(mpatches.Rectangle((0, 0), 1, 1, facecolor=colors[i % lc], edgecolor=edge, alpha=alpha))
-    return handles
-
-
 # load the datasets
 towns = gpd.read_file('data_files/Towns.shp')
 farms = gpd.read_file('data_files/farms2.shp')
@@ -58,16 +49,33 @@ fig2.savefig('scatterplot.png', dpi=300)
 
 # create pie chart of number of farm animals kept in Norther Ireland
 
-x = [1608559, 1985109, 673261, 24805]
-labels = ['Cattle', 'Sheeps', 'Pigs', 'Poultry']
-colors = ['tab:blue', 'tab:cyan', 'tab:orange', 'tab:red']
+# x = [1608559, 1985109, 673261, 24805]
+# labels = ['Cattle', 'Sheeps', 'Pigs', 'Poultry']
+# colors = ['tab:blue', 'tab:cyan', 'tab:orange', 'tab:red']
 
-fig3, ax3 = plt.subplots(figsize=(10, 10))
-ax3.pie(x, labels = labels, colors = colors)
-ax3.set_title('Division of farm animals in Northern Ireland')
-fig3.savefig('piechart.png', dpi=300)
+# Create a pie chart, dividing each farm animal into a wedge represented with total number of each animal and percentage
+fig3, ax3 = plt.subplots(figsize=(6, 3), subplot_kw=dict(aspect="equal"))
 
-# add a title and annotation
+numanimals = ["1608559 Cattle", "1985109 Sheeps", "673261 Pigs", "24805 Poultry"]
+data =[float(x.split()[0]) for x in numanimals]
+animals =[x.split()[-1] for x in numanimals]
+
+
+def func(pct, allvals):
+    absolute = int(round(pct/100.*np.sum(allvals)))
+    return "{:.1f}%\n({:d} )".format(pct, absolute)
+
+
+wedges, texts, autotexts = ax3.pie(data, autopct=lambda pct: func(pct, data), textprops=dict(color="w"))
+
+ax3.legend(wedges, animals, title="Animals", loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
+plt.setp(autotexts, size=8, weight="bold")
+
+ax3.set_title("Division of Animals in Northern Ireland")
+
+fig3.savefig('piechart.png')
+
+# add a title
 ax.set_title('Total Farms in each District', fontdict={'fontsize': '25', 'fontweight': '3'})
 
 # Create colorbar legend
