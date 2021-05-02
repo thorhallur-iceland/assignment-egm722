@@ -44,23 +44,19 @@ ax2.scatter(x=farms['NumberOfFa'], y=farms['TotalNumbe'], edgecolors='r')
 plt.xlabel('Farmers')
 plt.ylabel('Farms')
 plt.title('Relations between Number of Farmers and Farms')
-
+# save and print figure
 fig2.savefig('scatterplot.png', dpi=300)
 
-# create pie chart of number of farm animals kept in Norther Ireland
-
-# x = [1608559, 1985109, 673261, 24805]
-# labels = ['Cattle', 'Sheeps', 'Pigs', 'Poultry']
-# colors = ['tab:blue', 'tab:cyan', 'tab:orange', 'tab:red']
 
 # Create a pie chart, dividing each farm animal into a wedge represented with total number of each animal and percentage
 fig3, ax3 = plt.subplots(figsize=(6, 3), subplot_kw=dict(aspect="equal"))
-
+# adding the data
 numanimals = ["1608559 Cattle", "1985109 Sheeps", "673261 Pigs", "24805 Poultry"]
 data =[float(x.split()[0]) for x in numanimals]
 animals =[x.split()[-1] for x in numanimals]
 
 
+# create a function that calculates percentage
 def func(pct, allvals):
     absolute = int(round(pct/100.*np.sum(allvals)))
     return "{:.1f}%\n({:d} )".format(pct, absolute)
@@ -72,7 +68,7 @@ ax3.legend(wedges, animals, title="Animals", loc="center left", bbox_to_anchor=(
 plt.setp(autotexts, size=8, weight="bold")
 
 ax3.set_title("Division of Animals in Northern Ireland")
-
+# save and print figure
 fig3.savefig('piechart.png')
 
 # add a title
@@ -89,6 +85,6 @@ ax_sm.set_label('Total Farms', fontdict={'fontsize': '15', 'fontweight': '3'})
 # create map
 farms.plot(column=variable, cmap='Reds', linewidth=0.8, ax=ax, edgecolor='0.8', transform=myCRS)
 
-
+# save and print figure
 fig.savefig('map.png', dpi=300)
 
